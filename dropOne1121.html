@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+<meta charset="utf-8">
+<title>canvas test</title>
+<head>
+<style>
+html, body{ width:100%;  height:100%;  margin:0;  padding:0;}
+body, td{ line-height:1.4em}
+body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, form, fieldset, legend, input, textarea, p, th, td, dl, dt, dd{ margin:0;  padding:0;  font-size:12px;  font-weight:normal;}
+div {margin:0;  padding:0;}
+/*bincole 背景色设置background*/
+.wrap {width:100%;height: 100%;background: #fff; background-size:100%; color:#fff; text-align: center;}
+/*bincole 水波透明度设置opacity*/
+#canvas{
+   /* width:100%;
+    height:100%;*/
+    position: absolute;
+    left:0;
+    top:50%;
+    opacity: 0.9;
+}
+
+
+p {
+    font-size: 96px;
+    line-height: 96px;
+    position: absolute;
+    top:50%;
+    left:50%;
+    color: #0089fd;
+    font-weight: bold;
+    margin-top: -100px;
+    height: auto;
+}
+</style>
+</head>
+<body>
+    <div class="wrap">
+        <p class="drop">水滴小组</p>
+        <canvas id='canvas' width="800" height="400">unsupport</canvas>
+    </div>
+    
+ 
+</body>
+<script>
+    (function(win, doc) {
+
+        var settings = {
+            rate: 60,
+            backgroundColor: '#fff' // bincole:水波背景色
+        };
+
+        var winWidth = document.getElementsByClassName('wrap')[0].offsetWidth;
+        var winHeight = document.getElementsByClassName('wrap')[0].offsetHeight;
+        
+        // 文字高度
+        var word = document.getElementsByTagName('p')[0];
+        var wordHeight = word.offsetHeight;
+        var wordWidth = word.offsetWidth;
+        var wordTop = word.offsetTop;
+        
+        console.log('wordWidth:' + word.offsetHeight)
+        word.style.marginTop = -word.offsetHeight/2 + 'px';
+        word.style.marginLeft = -word.offsetWidth/2 + 'px';
+
+        var canvas = document.getElementById('canvas');
+
+        // 画布宽高
+        var canvasWidth =  canvas.width = winWidth;
+        var canvasHeight = canvas.height = wordHeight + 20;
+
+        canvas.style.marginTop = -canvasHeight/2 + 'px';
+
+        console.log('canvasHeight:' + canvasHeight);
+        var ctx = canvas.getContext('2d');
+        var G = 0, rate = settings.rate;
+
+        ctx.strokeColor = '#fff';
+        ctx.lineWidth = 1;
+        
+        // 矩形
+        // ctx.beginPath();
+        // ctx.fillStyle = "#fff";
+        // ctx.strokeRect(0, 0, 600, 400);
+        // ctx.stroke();
+        // //
+        // ctx.fill();
+        // ctx.restore();
+        // ctx.save();
+
+        /*setInterval(function() {
+
+            ctx.clearRect(0,0,canvasWidth, canvasHeight);
+
+            var temp = [];
+            var tt = (G%rate > rate/2) ? rate - G%rate : G%rate;
+            var num = 1 + 0.03 * tt;
+            G++;
+
+            var ratio = 20;
+            var length = parseInt(canvasWidth / ratio);
+
+            for(var i = 0; i < 20 ; i += 0.01 ){
+                var x = i * ratio;
+                var y = Math.sin(i + G/2) * 5 + canvasHeight / length;
+                temp.push([x, y]);
+                console.log(x,y) 
+            }
+
+            // 画正弦曲线
+            ctx.moveTo(0, 0);
+            ctx.beginPath();
+            for(var i = 0; i < temp.length; i++) {
+
+                // 
+                var waterTop  = canvasWidth/2 + wordHeight/ 2;
+                var waterLeft = temp[i][0];
+                var waterHeight = waterTop - temp[i][1];
+
+                ctx.moveTo(waterLeft, waterTop);
+                ctx.lineTo(waterLeft, waterHeight);
+
+                // bincole 可设置渐变色
+                /*var grad  = ctx.createLinearGradient(temp[i][0], 400, temp[i][0], temp[i][1] + 110*num - 70);
+                grad.addColorStop(0,'rgb(100, 50, 255)');    
+                grad.addColorStop(0.5,'rgb(100, 170, 255)');
+                ctx.strokeStyle = grad;*/
+
+                /*ctx.strokeStyle = settings.backgroundColor;
+
+            }
+
+            ctx.lineWidth = 1.0; // 设置线宽
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+            
+        }, 5000);*/
+
+        setInterval(function() {
+
+            ctx.clearRect(0,0,canvasWidth, canvasHeight);
+
+            var temp = [];
+            var tt = (G%rate > rate/2) ? rate - G%rate : G%rate;
+            var num = 0.1 * tt;
+            G++;
+            var waterTop  = wordTop + wordHeight + 10;
+
+            // console.log('waterTop:' + waterTop);
+            
+            var ratio = 40;
+            var length = parseInt(canvasWidth / ratio);
+            
+            for(var i = 0; i < length ; i += 0.01 ){
+                var x = i * ratio;
+                var y = Math.sin(i + G/5) * 10 + 40 * num;
+                temp.push([x, y]);
+            }
+
+            // 画正弦曲线
+            ctx.moveTo(0, 0);
+            ctx.beginPath();
+            for(var i = 0; i < temp.length; i++) {
+                // var waterLeft = temp[i][0];
+                var waterTop  = canvasWidth/2 + wordHeight/ 2;
+                var waterLeft = temp[i][0];
+                var waterHeight = waterTop - temp[i][1];
+
+                ctx.moveTo(waterLeft, canvasHeight);
+                ctx.lineTo(waterLeft, canvasHeight - temp[i][1]);
+
+                // bincole 可设置渐变色
+                /*var grad  = ctx.createLinearGradient(temp[i][0], 400, temp[i][0], temp[i][1] + 110*num - 70);
+                grad.addColorStop(0,'rgb(100, 50, 255)');    
+                grad.addColorStop(0.5,'rgb(100, 170, 255)');
+                ctx.strokeStyle = grad;*/
+
+                ctx.strokeStyle = settings.backgroundColor;
+
+            }
+
+            ctx.lineWidth = 1.0; // 设置线宽
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+            
+        }, 100);
+
+    })(window, document);
+</script>
+</html>

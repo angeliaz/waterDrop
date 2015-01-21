@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<title>canvas test</title>
+<head>
+<style>
+html{ width:100%;  height:100%;  margin:0;  padding:0}
+body, td{ line-height:1.4em}
+body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, form, fieldset, legend, input, textarea, p, th, td, dl, dt, dd{ margin:0;  padding:0;  font-size:12px;  font-weight:normal;}
+
+/*bincole 背景色设置background*/
+.wrap {position: relative;width:600px;height: 400px;background: #000;color:#fff;}
+/*bincole 水波透明度设置opacity*/
+#canvas{
+    width:600px;
+    height:400px;
+    position: absolute;
+    left:0;
+    top:0;
+    opacity: 0.9;
+}
+.words {
+    position: absolute;
+    left: 10%;
+    top:15%;
+    
+}
+.words p {
+    font-size: 90px;
+    line-height: 90px;
+    /*letter-spacing: 15px;*/
+    font-weight: bold;
+}
+.words .loading {
+    font-size: 100px;
+    line-height: 90px;
+    /*letter-spacing: 15px;*/
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="words">
+            <p>水滴小组</p>
+            <p class="loading">loading</p>
+        </div>
+        <canvas id='canvas' width=600 height=400>unsupport</canvas>
+    </div>
+    
+ 
+</body>
+<script>
+    (function(win, doc) {
+
+        var settings = {
+            rate: 120,
+            backgroundColor: '#000' // bincole:水波背景色
+        };
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var G = 0, rate = settings.rate;
+
+        ctx.strokeColor = 'black';
+        ctx.lineWidth = 1;
+        
+        // 矩形
+        ctx.beginPath();
+        ctx.strokeRect(0, 0, 600, 400);
+        ctx.stroke();
+        ctx.restore();
+        ctx.save();
+
+        setInterval(function() {
+
+            ctx.clearRect(1,1,598,598);
+
+            var temp = [];
+            var tt = (G%rate > rate/2) ? rate - G%rate : G%rate;
+            var num = 1 + 0.03 * tt;
+            G++;
+            
+            
+            for(var i = 0; i < 30 ; i += 0.01 ){
+                var x = i * 20;
+                var y = Math.sin(i + G/2) * 4 + num;
+                temp.push([x, y]);
+            }
+
+            // 画正弦曲线
+            ctx.moveTo(0, 0);
+            ctx.beginPath();
+            for(var i = 0; i < temp.length; i++) {
+                ctx.moveTo(temp[i][0], 400);
+                ctx.lineTo(temp[i][0], temp[i][1] + 110*num - 70);
+
+                // bincole 可设置渐变色
+                /*var grad  = ctx.createLinearGradient(temp[i][0], 400, temp[i][0], temp[i][1] + 110*num - 70);
+                grad.addColorStop(0,'rgb(100, 50, 255)');    
+                grad.addColorStop(0.5,'rgb(100, 170, 255)');
+                ctx.strokeStyle = grad;*/
+
+                ctx.strokeStyle = settings.backgroundColor;
+
+            }
+
+            ctx.lineWidth = 1.0; // 设置线宽
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+            
+        }, 100);
+
+    })(window, document);
+</script>
+</html>

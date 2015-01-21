@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<title>canvas test</title>
+<head>
+<style>
+#canvas{
+    width:800px;
+    height:800px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, .8);
+    margin: 10px 10px;
+}
+</style>
+</head>
+<body>
+    <canvas id='canvas' width=800 height=800>unsupport</canvas>
+ 
+</body>
+<script>
+window.onload = function(){
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    ctx.strokeColor = 'black';
+    ctx.lineWidth = 1;
+    ctx.shadowOffsetX = 5;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 2;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+    //ctx.save();
+    ctx.beginPath();
+    //ctx.moveTo(0, 0);
+    //ctx.arc(200, 200, 200, 0, 2 * Math.PI);
+    //ctx.fillStyle = "#fff"; 
+    ctx.strokeRect(0, 0, 200, 200);
+    //ctx.fill(); 
+    ctx.stroke();
+    ctx.restore();
+    ctx.save();
+
+    var G = 0;
+
+    setInterval(function() {
+        ctx.clearRect(1,1,199,199);
+        //var num = parseInt(Math.random() * 3);
+        var num = 1, tt = 0;    
+        if(G % 10 > 4) {
+            tt = 10 - G%10;
+            //num = 1 + 0.05 * (10 - G%10);
+        } else {;
+            tt = G % 10;
+            //num = 1 + 0.05* (G%10);
+        }
+        num = 1 + 0.05 * tt;
+        //console.log('num:' + num + '; G:' + G);
+        //var num = 1 + 0.05 * (G%5);
+        G++;
+        //ctx.translate(0, 100);
+        /*ctx.beginPath();*/
+        //ctx.moveTo(0, 0);
+        //ctx.lineTo(400, 0);
+        var temp = [];
+        ctx.moveTo(0, 0);
+        for(var i = 0; i < 20 ; i += 0.01 ){
+            var x = i * 10;
+            var y = Math.sin(i + G/4) * 5 + num;
+            //ctx.lineTo(x, y);
+            temp.push([x, y]);
+        }
+        /*ctx.stroke();
+        ctx.fillStyle = "#000000"; 
+        //ctx.fill();
+        ctx.restore();*/
+        //ctx.save();
+
+        ctx.beginPath();
+        for(var i = 0; i < temp.length; i++) {
+            ctx.moveTo(temp[i][0], 200);
+            ctx.lineTo(temp[i][0], temp[i][1] + 100);
+            var grad  = ctx.createLinearGradient(temp[i][0], 200, temp[i][0], temp[i][1] + 100);
+            grad.addColorStop(0,'rgb(100, 50, 255)');    // 红
+            grad.addColorStop(0.5,'rgb(100, 170, 255)'); // 绿
+            ctx.strokeStyle = grad//"#CC0000"; 
+        }
+        ctx.lineWidth = 1.0; // 设置线宽
+        ctx.stroke();
+        ctx.restore();
+        ctx.save();
+        
+    }, 100);
+
+
+
+    /*var imgData = ctx.getImageData(0, 0, 200, 200);
+    for (var i=0;i<imgData.data.length;i+=4)
+  {
+  imgData.data[i]=255-imgData.data[i];
+  imgData.data[i+1]=255-imgData.data[i+1];
+  imgData.data[i+2]=255-imgData.data[i+2];
+  imgData.data[i+3]=255;
+  }*/
+//ctx.putImageData(imgData,0,0);
+    
+
+};
+</script>
+</html>
